@@ -409,7 +409,8 @@ trait BillableTrait {
 	 */
 	public function getTrialEndDate()
 	{
-		return $this->trial_ends_at;
+		$ret = $this->trial_ends_at;
+		return ($ret instanceof \Carbon\Carbon) ? $ret : (new \Carbon\Carbon($ret)); 
 	}
 
 	/**

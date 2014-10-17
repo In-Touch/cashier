@@ -543,7 +543,14 @@ class StripeGateway {
 	 */
 	protected function getLastFourCardDigits($customer)
 	{
-		return ($customer->default_card) ? $customer->cards->retrieve($customer->default_card)->last4 : null;
+		// try-catch in case the customer was created for a trial without a card
+		try {
+            return $customer->cards->retrieve($customer->default_card)->last4;
+        }
+        catch (\Stripe_InvalidRequestError $ex) {
+            \Log::error($ex);
+            return '----';
+        }
 	}
 
 	/**
